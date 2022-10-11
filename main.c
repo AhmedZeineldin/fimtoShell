@@ -23,6 +23,7 @@ void main()
     char assignmentCheck;
     int envVarsCount = 0;
     char*** envVars = NULL;
+    int envVarFoundFlag = 0; 
     while (1) {
 	printf("Please type your command> ");
 	fgets(command, 100, stdin);
@@ -30,26 +31,40 @@ void main()
 	{
 	    len = strlen(command);
 	    command[len - 1] = 0;
-	    
-	    if( !( strcmp(command, "set") ) )
+	    parseCommand(command);
+	    cPtr = getCommand(command, len, &commandCounter);
+	    if( !( strcmp(cPtr[0], "set") ) )
 	    {
 			for(int i = 0; i < envVarsCount; i++)
 	        	{
 	        		printf("local_vars[%d]: %s = %s\n",i,envVars[i][0],envVars[i][1]);	
 	        	}
             }
-	    else if( !( strcmp(command, "export") ) )
+	    else if( !( strcmp(cPtr[0], "export") ) )
 	    {
-	
+	    	envVarFoundFlag = 0; 
+		for(int i = 0; i < envVarsCount; i++)
+		{
+			if(commandCounter > 1)
+			{
+				if (!strcmp( cPtr[1], envVars[i][0] ) )
+				{
+					envVarFoundFlag = 1;
+					setenv(envVars[i][0], envVars[i][1], 1);
+					break;
+				}
+			}
+		}
+		if( (envVarFoundFlag != 1) && (commandCounter > 1) )
+		{
+			printf("could not export [%s], variable does not exist\n",cPtr[1]);
+		}
 	    }
 	    else
 	    {
 	        assignmentCheck = commandAssignmentCheck(command);
 	        if(assignmentCheck != 1)
 	        {
-
-	            parseCommand(command);
-	            cPtr = getCommand(command, len, &commandCounter);
 	            cPtr[commandCounter] = NULL;
 	            ret_pid = fork();
 

@@ -3,7 +3,9 @@
 #include "fim.h"
 
 /*------------------------------------------------------------------------------------------------------------------*/
-
+/*
+ * This function takes a char array, removes spaces and seperates words with '\0' instead
+ */ 
 void parseCommand(char* pu8CommandArr)
 {
     char * scanner, *reference;
@@ -46,6 +48,14 @@ void parseCommand(char* pu8CommandArr)
 }
 
 /*------------------------------------------------------------------------------------------------------------------*/
+/*
+ * This functions takes char array, with its length "length" and an int var reference, that if the received array is
+ * not full empty it alloactes the command with its argument in the heap.
+ *
+ * RETURNS a pointer that points to both the command and its arguments, else it frees the space (received all space 
+ * array). 
+ */
+
 char** getCommand(char* commandsArr, int length ,int* numberOfCommands)
 {
 	int nullCounter = 0;
@@ -83,6 +93,9 @@ char** getCommand(char* commandsArr, int length ,int* numberOfCommands)
 }
 
 /*-------------------------------------------------------------------------------------------------------------------*/
+/*
+ * RETURNS 1 if there is assignment operator in the command recieved else return 0
+ */
 char   commandAssignmentCheck(char* command)
 {
 	char returnVal = 0;
@@ -100,7 +113,12 @@ char   commandAssignmentCheck(char* command)
 }
 
 /*-------------------------------------------------------------------------------------------------------------------*/
-
+/*
+ * Recieves the variable assignment array "command" saves it using the realloc function in the heap to keep both the
+ * variable and its value saved contiguously in memory seperated by '\0' operator.
+ * 
+ * RETURNS: pointer to 2 pointers; firts is the variable, second is the value
+ */
 char**  assignmentParseCommand(char* command)
 {
         char* expressionPtr = NULL;

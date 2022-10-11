@@ -10,8 +10,6 @@
 void main()
 {
     char command[100] = { };
-    char *const argv[] = { NULL };
-    char *const envp[] = { NULL };
     int status;
     int commandCounter = 0;
     char **cPtr;
@@ -24,6 +22,7 @@ void main()
     int envVarsCount = 0;
     char*** envVars = NULL;
     int envVarFoundFlag = 0; 
+    
     while (1) {
 	printf("Please type your command> ");
 	fgets(command, 100, stdin);
@@ -31,11 +30,15 @@ void main()
 	{
 	    len = strlen(command);
 	    command[len - 1] = 0;
+	    
+	    /* Parse and get command */
 	    parseCommand(command);
 	    cPtr = getCommand(command, len, &commandCounter);
+	    
+	    /* first check on internal commands */
 	    if( !( strcmp(cPtr[0], "set") ) )
 	    {
-			for(int i = 0; i < envVarsCount; i++)
+			for(i = 0; i < envVarsCount; i++)
 	        	{
 	        		printf("local_vars[%d]: %s = %s\n",i,envVars[i][0],envVars[i][1]);	
 	        	}
@@ -43,7 +46,7 @@ void main()
 	    else if( !( strcmp(cPtr[0], "export") ) )
 	    {
 	    	envVarFoundFlag = 0; 
-		for(int i = 0; i < envVarsCount; i++)
+		for(i = 0; i < envVarsCount; i++)
 		{
 			if(commandCounter > 1)
 			{
@@ -82,11 +85,12 @@ void main()
 	    	}
 	    	else
 	    	{
+	    		/* we use realloc to keep all the array of pointers to the location were the envVars and their values are saved */
 	        	expressionPtr = assignmentParseCommand(command);
 	        	envVars       = (char***)realloc(envVars, envVarsCount+1);
 	        	envVars[envVarsCount++] = expressionPtr;
 	    	}
 	    }
-	} 
+	}
     }
 }

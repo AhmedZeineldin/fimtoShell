@@ -33,7 +33,10 @@ void main()
 	    
 	    if( !( strcmp(command, "set") ) )
 	    {
-		
+			for(int i = 0; i < envVarsCount; i++)
+	        	{
+	        		printf("local_vars[%d]: %s = %s\n",i,envVars[i][0],envVars[i][1]);	
+	        	}
             }
 	    else if( !( strcmp(command, "export") ) )
 	    {
@@ -67,10 +70,6 @@ void main()
 	        	expressionPtr = assignmentParseCommand(command);
 	        	envVars       = (char***)realloc(envVars, envVarsCount+1);
 	        	envVars[envVarsCount++] = expressionPtr;
-	        	for(int i = 0; i < envVarsCount; i++)
-	        	{
-	        		printf("variable is %s value is %s\n",envVars[i][0],envVars[i][1]);	
-	        	}
 	    	}
 	    }
 	} 

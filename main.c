@@ -21,6 +21,8 @@ void main()
     int i = 0;
     int ret_pid;
     char assignmentCheck;
+    int envVarsCount = 0;
+    char*** envVars = NULL;
     while (1) {
 	printf("Please type your command> ");
 	fgets(command, 100, stdin);
@@ -63,7 +65,12 @@ void main()
 	    	else
 	    	{
 	        	expressionPtr = assignmentParseCommand(command);
-	        	printf("variable is %s value is %s\n",expressionPtr[0],expressionPtr[1]);
+	        	envVars       = (char***)realloc(envVars, envVarsCount+1);
+	        	envVars[envVarsCount++] = expressionPtr;
+	        	for(int i = 0; i < envVarsCount; i++)
+	        	{
+	        		printf("variable is %s value is %s\n",envVars[i][0],envVars[i][1]);	
+	        	}
 	    	}
 	    }
 	} 
